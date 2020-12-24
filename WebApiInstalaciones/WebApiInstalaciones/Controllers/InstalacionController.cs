@@ -42,20 +42,6 @@ namespace WebApiInstalaciones.Controllers
             return Ok(login);
         }
 
-        [HttpGet]
-        [Route("Sync")]
-        public IHttpActionResult GetSincronizar()
-        {
-            try
-            {
-                return Ok(NegocioDao.GetSync());
-            }
-            catch (Exception)
-            {
-                return BadRequest("No puedes Sincronizar");
-            }
-        }
-
         [HttpPost]
         [Route("SyncComplete")]
         public IHttpActionResult GetSyncComplete(Query q)
@@ -324,17 +310,17 @@ namespace WebApiInstalaciones.Controllers
             catch (Exception e)
             {
                 throw e;
-            }           
-            
+            }
+
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("OrdenCompra")]
-        public IHttpActionResult OrdenCompra(string usuario)
+        public IHttpActionResult OrdenCompra(Query q)
         {
             try
             {
-                List<Orden> m = NegocioDao.GetOrdenCompra(usuario);
+                List<Orden> m = NegocioDao.GetOrdenCompra(q);
                 if (m != null)
                     return Ok(m);
                 else
@@ -348,11 +334,11 @@ namespace WebApiInstalaciones.Controllers
 
         [HttpGet]
         [Route("GetAnulacion")]
-        public IHttpActionResult GetAnulacion(string usuario,string fi,string ff)
+        public IHttpActionResult GetAnulacion(string usuario, string fi, string ff)
         {
             try
             {
-                List<Anular> m = NegocioDao.GetAnular(usuario,fi,ff);
+                List<Anular> m = NegocioDao.GetAnular(usuario, fi, ff);
                 if (m != null)
                     return Ok(m);
                 else
@@ -401,12 +387,67 @@ namespace WebApiInstalaciones.Controllers
         }
 
         [HttpPost]
+        [Route("UpdateCantidadCampoJefeTiempoVida")]
+        public IHttpActionResult UpdateCantidadCampoJefeTiempoVida(Query r)
+        {
+            try
+            {
+                Mensaje m = NegocioDao.UpdateCantidadCampoJefeTiempoVida(r);
+                if (m != null)
+                    return Ok(m);
+                else
+                    return BadRequest("Error");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpPost]
         [Route("AprobacionOrdenCompra")]
         public IHttpActionResult AprobacionOrdenCompra(Query r)
         {
             try
             {
                 Mensaje m = NegocioDao.AprobacionOrdenCompra(r);
+                if (m != null)
+                    return Ok(m);
+                else
+                    return BadRequest("Error");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("AprobacionPedido")]
+        public IHttpActionResult AprobacionPedido(Query r)
+        {
+            try
+            {
+                Mensaje m = NegocioDao.AprobacionPedido(r);
+                if (m != null)
+                    return Ok(m);
+                else
+                    return BadRequest("Error");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpPost]
+        [Route("AprobacionCampoJefeTiempoVida")]
+        public IHttpActionResult AprobacionCampoJefeTiempoVida(Query r)
+        {
+            try
+            {
+                Mensaje m = NegocioDao.AprobacionCampoJefeTiempoVida(r);
                 if (m != null)
                     return Ok(m);
                 else
@@ -435,5 +476,65 @@ namespace WebApiInstalaciones.Controllers
                 throw e;
             }
         }
+
+
+        // nuevo
+        [HttpPost]
+        [Route("CampoJefe")]
+        public IHttpActionResult CampoJefe(Query r)
+        {
+            try
+            {
+                List<CampoJefe> m = NegocioDao.GetCampoJefe(r);
+                if (m != null)
+                    return Ok(m);
+                else
+                    return BadRequest("No hay datos");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpPost]
+        [Route("TiempoVida")]
+        public IHttpActionResult TiempoVida(Query r)
+        {
+            try
+            {
+                List<TiempoVida> m = NegocioDao.GetTiempoVida(r);
+                if (m != null)
+                    return Ok(m);
+                else
+                    return BadRequest("No hay datos");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpPost]
+        [Route("AprobarItemsCampoJefeTiempoVida")]
+        public IHttpActionResult AprobarItemsCampoJefeTiempoVida(Query r)
+        {
+            try
+            {
+                Mensaje m = NegocioDao.GetAprobarItemsCampoJefeTiempoVida(r);
+                if (m != null)
+                    return Ok(m);
+                else
+                    return BadRequest("No hay datos");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
+
+
+
     }
 }

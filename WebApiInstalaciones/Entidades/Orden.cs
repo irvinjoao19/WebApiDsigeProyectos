@@ -34,6 +34,8 @@ namespace Entidades
         public decimal precio { get; set; }
         public decimal importe { get; set; }
         public string delegacion { get; set; }
+        public string cotiCodigo { get; set; }
+        public int nivelAcumulado { get; set; }		
         public List<OrdenDetalle> detalles { get; set; }
     }
 }

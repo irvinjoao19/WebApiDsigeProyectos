@@ -209,92 +209,6 @@ namespace Negocio
             return cResult;
         }
 
-        public static Sync GetSync()
-        {
-            try
-            {
-                Sync s = new Sync();
-
-                using (SqlConnection con = new SqlConnection(db))
-                {
-                    con.Open();
-                    SqlCommand cmdV = con.CreateCommand();
-                    cmdV.CommandTimeout = 0;
-                    cmdV.CommandType = CommandType.StoredProcedure;
-                    cmdV.CommandText = "Movil_GetVehiculos";
-                    //cmdV.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
-                    SqlDataReader drV = cmdV.ExecuteReader();
-                    if (drV.HasRows)
-                    {
-                        List<Vehiculo> v = new List<Vehiculo>();
-                        while (drV.Read())
-                        {
-                            v.Add(new Vehiculo()
-                            {
-                                codigo = drV.GetString(0),
-                                placa = drV.GetString(1),
-                                tipoVehiculo = drV.GetString(2),
-                                marca = drV.GetString(3),
-                                modelo = drV.GetString(4),
-                                anio = drV.GetString(5),
-                                combustible = drV.GetString(6),
-                                condicion = drV.GetString(7),
-                                costo = drV.GetString(8),
-                                serie = drV.GetString(9),
-                                estado = 0
-
-                            });
-                        }
-                        s.vehiculos = v;
-                    }
-
-                    SqlCommand cmdC = con.CreateCommand();
-                    cmdC.CommandTimeout = 0;
-                    cmdC.CommandType = CommandType.StoredProcedure;
-                    cmdC.CommandText = "Movil_GetCombos";
-                    SqlDataReader drC = cmdC.ExecuteReader();
-                    if (drC.HasRows)
-                    {
-                        List<ParametroT> p = new List<ParametroT>();
-                        while (drC.Read())
-                        {
-                            p.Add(new ParametroT()
-                            {
-                                tipo = drC.GetInt32(0),
-                                campo1 = drC.GetString(1),
-                                campo2 = drC.GetString(2)
-                            });
-                        }
-                        s.parametrosT = p;
-                    }
-
-                    SqlCommand cmdE = con.CreateCommand();
-                    cmdE.CommandTimeout = 0;
-                    cmdE.CommandType = CommandType.StoredProcedure;
-                    cmdE.CommandText = "Movil_GetEstados";
-                    SqlDataReader drE = cmdE.ExecuteReader();
-                    if (drE.HasRows)
-                    {
-                        List<Estado> e = new List<Estado>();
-                        while (drE.Read())
-                        {
-                            e.Add(new Estado()
-                            {
-                                codigo = drE.GetString(0),
-                                nombre = drE.GetString(1)
-                            });
-                        }
-                        s.estados = e;
-                    }
-                    con.Close();
-                }
-                return s;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
         public static Sync GetSyncComplete(Query q)
         {
             try
@@ -305,386 +219,386 @@ namespace Negocio
                 {
                     con.Open();
 
-                    SqlCommand cmdV = con.CreateCommand();
-                    cmdV.CommandTimeout = 0;
-                    cmdV.CommandType = CommandType.StoredProcedure;
-                    cmdV.CommandText = "Movil_GetVehiculos";
-                    //cmdV.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
-                    SqlDataReader drV = cmdV.ExecuteReader();
-                    if (drV.HasRows)
-                    {
-                        List<Vehiculo> v = new List<Vehiculo>();
-                        while (drV.Read())
-                        {
-                            v.Add(new Vehiculo()
-                            {
-                                codigo = drV.GetString(0),
-                                placa = drV.GetString(1),
-                                tipoVehiculo = drV.GetString(2),
-                                marca = drV.GetString(3),
-                                modelo = drV.GetString(4),
-                                anio = drV.GetString(5),
-                                combustible = drV.GetString(6),
-                                condicion = drV.GetString(7),
-                                costo = drV.GetString(8),
-                                serie = drV.GetString(9),
-                                estado = 0
-
-                            });
-                        }
-                        s.vehiculos = v;
-                    }
-
-                    SqlCommand cmdC = con.CreateCommand();
-                    cmdC.CommandTimeout = 0;
-                    cmdC.CommandType = CommandType.StoredProcedure;
-                    cmdC.CommandText = "Movil_GetCombos";
-                    SqlDataReader drC = cmdC.ExecuteReader();
-                    if (drC.HasRows)
-                    {
-                        List<ParametroT> p = new List<ParametroT>();
-                        while (drC.Read())
-                        {
-                            p.Add(new ParametroT()
-                            {
-                                tipo = drC.GetInt32(0),
-                                campo1 = drC.GetString(1),
-                                campo2 = drC.GetString(2)
-                            });
-                        }
-                        s.parametrosT = p;
-                    }
-
-                    SqlCommand cmdE = con.CreateCommand();
-                    cmdE.CommandTimeout = 0;
-                    cmdE.CommandType = CommandType.StoredProcedure;
-                    cmdE.CommandText = "Movil_GetEstados";
-                    SqlDataReader drE = cmdE.ExecuteReader();
-                    if (drE.HasRows)
-                    {
-                        List<Estado> e = new List<Estado>();
-                        while (drE.Read())
-                        {
-                            e.Add(new Estado()
-                            {
-                                codigo = drE.GetString(0),
-                                nombre = drE.GetString(1)
-                            });
-                        }
-                        s.estados = e;
-                    }
-
-                    SqlCommand cmdAlm = con.CreateCommand();
-                    cmdAlm.CommandTimeout = 0;
-                    cmdAlm.CommandType = CommandType.StoredProcedure;
-                    cmdAlm.CommandText = "Movil_GetAlmacenes";
-                    cmdAlm.Parameters.Add("@sucursal", SqlDbType.VarChar).Value = q.sucursalId;
-                    cmdAlm.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
-                    SqlDataReader drAl = cmdAlm.ExecuteReader();
-                    if (drAl.HasRows)
-                    {
-                        List<Almacen> alm = new List<Almacen>();
-                        while (drAl.Read())
-                        {
-                            alm.Add(new Almacen()
-                            {
-                                codigo = drAl.GetString(0),
-                                tipoCodigo = drAl.GetString(1),
-                                sucursalCodigo = drAl.GetString(2),
-                                descripcion = drAl.GetString(3),
-                                opCodigo = drAl.GetString(4),
-                                inventario = drAl.GetString(5),
-                                equipamiento = drAl.GetString(6),
-                                seraEdelnor = drAl.GetString(7)
-                            });
-                        }
-                        s.almacens = alm;
-                    }
-
-                    SqlCommand cmdParametro = con.CreateCommand();
-                    cmdParametro.CommandTimeout = 0;
-                    cmdParametro.CommandType = CommandType.StoredProcedure;
-                    cmdParametro.CommandText = "Movil_GetParametros";
-                    SqlDataReader drParametro = cmdParametro.ExecuteReader();
-                    if (drParametro.HasRows)
-                    {
-                        List<ParametroE> parametro = new List<ParametroE>();
-                        while (drParametro.Read())
-                        {
-                            parametro.Add(new ParametroE()
-                            {
-                                id_Configuracion = drParametro.GetInt32(0),
-                                nombre_parametro = drParametro.GetString(1),
-                                valor = drParametro.GetInt32(2)
-                            });
-                        }
-                        s.parametrosE = parametro;
-                    }
-
-                    // Parte Diario
-
-                    SqlCommand cmdP = con.CreateCommand();
-                    cmdP.CommandTimeout = 0;
-                    cmdP.CommandType = CommandType.StoredProcedure;
-                    cmdP.CommandText = "Movil_GetParteDiario_C";
-                    cmdP.Parameters.Add("@Area", SqlDbType.VarChar).Value = q.areaId;
-                    cmdP.Parameters.Add("@UsuarioId", SqlDbType.VarChar).Value = q.usuarioId;
-                    cmdP.Parameters.Add("@CentroCostoId", SqlDbType.VarChar).Value = q.centroCostoId;
-                    SqlDataReader drP = cmdP.ExecuteReader();
-                    if (drP.HasRows)
-                    {
-                        List<ParteDiario> parte = new List<ParteDiario>();
-                        while (drP.Read())
-                        {
-                            var p = new ParteDiario();
-                            p.parteDiarioId = drP.GetInt32(0);
-                            p.identity = drP.GetInt32(0);
-                            p.fecha = drP.GetDateTime(1).ToString("dd/MM/yyyy");
-                            p.obraTd = drP.GetString(2);
-                            p.codigoEstadoPd = drP.GetString(3);
-                            p.estadoTd = drP.GetString(4);
-                            p.codigoEstadoObra = drP.GetString(5);
-                            p.estadoObra = drP.GetString(6);
-                            p.descripcion = drP.GetString(7);
-                            p.direccion = drP.GetString(8);
-                            p.cliente = drP.GetString(9);
-                            p.fechaAsignacion = drP.GetDateTime(10).ToString("dd/MM/yyyy");
-                            p.fechaVencimiento = drP.GetDateTime(11).ToString("dd/MM/yyyy");
-                            p.suministro = drP.GetString(12);
-                            p.sed = drP.GetString(13);
-                            p.observacion = drP.GetString(14);
-                            p.empresaCodigo = drP.GetString(15);
-                            p.areaCodigo = drP.GetString(16);
-                            p.codigoInterno = drP.GetString(17);
-                            p.costoCodigo = drP.GetString(18);
-                            p.cuadrillaCodigo = drP.GetString(19);
-                            p.dniCuadrilla = drP.GetString(20);
-                            p.estadoCodigo = drP.GetString(21);
-                            p.usuarioCreacion = drP.GetString(22);
-                            p.fechaMovil = drP.GetDateTime(23).ToString("dd/MM/yyyy HH:mm:ss");
-                            p.sucursalId = drP.GetString(24);
-                            p.latitud = drP.GetString(25);
-                            p.longitud = drP.GetString(26);
-                            p.coordinadorDni = drP.GetString(27);
-                            p.descripcionCoordinador = drP.GetString(28);
-                            p.firmaMovil = drP.GetString(29);
-                            p.tipo = 1;
-                            p.estado = 1;
-                            p.medencontrado_nro = "";
-                            p.medencontrado_marca = "";
-                            p.medencontrado_fase = "";
-                            p.medencontrado_estado = "";
-                            p.medencontrado_modelo = "";
-                            p.medinstalado_nro = "";
-                            p.medinstalado_marca = "";
-                            p.medinstalado_fase = "";
-                            p.medinstalado_estado = "";
-                            p.medinstalado_modelo = "";
-
-                            // PARTE DIARIO BAREMO
-
-                            SqlCommand cmdPB = con.CreateCommand();
-                            cmdPB.CommandTimeout = 0;
-                            cmdPB.CommandType = CommandType.StoredProcedure;
-                            cmdPB.CommandText = "Movil_GetParteDiarioBaremo_C";
-                            cmdPB.Parameters.Add("@parteDiarioId", SqlDbType.VarChar).Value = p.parteDiarioId;
-
-                            SqlDataReader dmPB = cmdPB.ExecuteReader();
-                            if (dmPB.HasRows)
-                            {
-                                List<RegistroBaremo> rb = new List<RegistroBaremo>();
-
-                                while (dmPB.Read())
-                                {
-                                    rb.Add(new RegistroBaremo()
-                                    {
-                                        registroBaremoId = dmPB.GetInt32(0),
-                                        identityDetalle = dmPB.GetInt32(0),
-                                        parteDiarioId = dmPB.GetInt32(1),
-                                        identity = dmPB.GetInt32(1),
-                                        codigoBaremo = dmPB.GetString(2),
-                                        cantidadMovil = dmPB.GetDecimal(3),
-                                        cantidadOk = dmPB.GetDecimal(4),
-                                        fecha = dmPB.GetDateTime(5).ToString("dd/MM/yyyy"),
-                                        tipo = 1,
-                                        descripcion = dmPB.GetString(6),
-                                        abreviatura = dmPB.GetString(7),
-                                        unidadMedida = dmPB.GetString(8),
-                                        estado = p.estadoCodigo
-                                    });
-                                }
-                                p.baremos = rb;
-                            }
-
-                            // PARTE DIARIO MATERIALES
-
-                            SqlCommand cmdPM = con.CreateCommand();
-                            cmdPM.CommandTimeout = 0;
-                            cmdPM.CommandType = CommandType.StoredProcedure;
-                            cmdPM.CommandText = "Movil_GetParteDiarioMaterial_C";
-                            cmdPM.Parameters.Add("@parteDiarioId", SqlDbType.VarChar).Value = p.parteDiarioId;
-
-                            SqlDataReader dmPM = cmdPM.ExecuteReader();
-                            if (dmPM.HasRows)
-                            {
-                                List<RegistroMaterial> rm = new List<RegistroMaterial>();
-
-                                while (dmPM.Read())
-                                {
-                                    rm.Add(new RegistroMaterial()
-                                    {
-                                        registroMaterialId = dmPM.GetInt32(0),
-                                        identityDetalle = dmPM.GetInt32(0),
-                                        identity = dmPM.GetInt32(1),
-                                        parteDiarioId = dmPM.GetInt32(1),
-                                        tipoMaterial = dmPM.GetInt32(2),
-                                        almacenId = dmPM.GetString(3),
-                                        codigoMaterial = dmPM.GetString(4),
-                                        cantidadMovil = dmPM.GetDecimal(5),
-                                        cantidadOk = dmPM.GetDecimal(6),
-                                        fecha = dmPM.GetDateTime(7).ToString("dd/MM/yyyy"),
-                                        tipo = 1,
-                                        descripcion = dmPM.GetString(8),
-                                        abreviatura = dmPM.GetString(9),
-                                        unidadMedida = dmPM.GetString(10),
-                                        guiaSalida = dmPM.GetString(11),
-                                        nroSerie = dmPM.GetString(12),
-                                        estado = p.estadoCodigo
-                                    });
-                                }
-                                p.materiales = rm;
-                            }
-
-                            // PARTE DIARIO PHOTOS
-
-                            SqlCommand cmdPP = con.CreateCommand();
-                            cmdPP.CommandTimeout = 0;
-                            cmdPP.CommandType = CommandType.StoredProcedure;
-                            cmdPP.CommandText = "Movil_GetParteDiarioFoto_C";
-                            cmdPP.Parameters.Add("@parteDiarioId", SqlDbType.VarChar).Value = p.parteDiarioId;
-
-                            SqlDataReader dmPP = cmdPP.ExecuteReader();
-                            if (dmPP.HasRows)
-                            {
-                                List<RegistroPhoto> rp = new List<RegistroPhoto>();
-
-                                while (dmPP.Read())
-                                {
-                                    rp.Add(new RegistroPhoto()
-                                    {
-                                        registroPhotoId = dmPP.GetInt32(0),
-                                        identityFoto = dmPP.GetInt32(0),
-                                        identity = dmPP.GetInt32(1),
-                                        parteDiarioId = dmPP.GetInt32(1),
-                                        nombre = dmPP.GetString(2),
-                                        fecha = dmPP.GetDateTime(3).ToString("dd/MM/yyyy"),
-                                        tipo = 1
-                                    });
-                                }
-                                p.photos = rp;
-                            }
-                            parte.Add(p);
-                        }
-                        s.parteDiarios = parte;
-                    }
-
-                    // Baremos
-
-                    SqlCommand cmdB = con.CreateCommand();
-                    cmdB.CommandTimeout = 0;
-                    cmdB.CommandType = CommandType.StoredProcedure;
-                    cmdB.CommandText = "Movil_GetBaremos_C";
-                    cmdB.Parameters.Add("@area", SqlDbType.VarChar).Value = q.areaId;
-                    cmdB.Parameters.Add("@cc", SqlDbType.VarChar).Value = q.centroCostoId;
-                    cmdB.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
-                    SqlDataReader drB = cmdB.ExecuteReader();
-                    if (drB.HasRows)
-                    {
-                        List<Baremo> baremo = new List<Baremo>();
-                        while (drB.Read())
-                        {
-                            baremo.Add(new Baremo()
-                            {
-                                baremoId = drB.GetString(0),
-                                descripcion = drB.GetString(1),
-                                unidadMedida = drB.GetString(2),
-                                abreviatura = drB.GetString(3),
-                                actividadId = drB.GetInt32(4)
-                            });
-                        }
-                        s.baremos = baremo;
-                    }
-
-                    // Materiales
-
-                    SqlCommand cmdM = con.CreateCommand();
-                    cmdM.CommandTimeout = 0;
-                    cmdM.CommandType = CommandType.StoredProcedure;
-                    cmdM.CommandText = "Movil_GetMateriales_C";
-                    cmdM.Parameters.Add("@area", SqlDbType.VarChar).Value = q.areaId;
-                    cmdM.Parameters.Add("@cc", SqlDbType.VarChar).Value = q.centroCostoId;
-                    cmdM.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
-                    SqlDataReader drM = cmdM.ExecuteReader();
-                    if (drM.HasRows)
-                    {
-                        List<Materiales> m = new List<Materiales>();
-                        while (drM.Read())
-                        {
-                            m.Add(new Materiales()
-                            {
-                                id = drM.GetInt32(0),
-                                tipoMaterial = drM.GetString(1),
-                                materialId = drM.GetString(2),
-                                descripcion = drM.GetString(3),
-                                unidadMedida = drM.GetString(4),
-                                abreviatura = drM.GetString(5),
-                                stock = drM.GetDecimal(6),
-                                obra = drM.GetString(7),
-                                cc = drM.GetString(8),
-                                almacenId = drM.GetString(9),
-                                guiaSalida = drM.GetString(10),
-                                exigeSerie = drM.GetString(11),
-                                tipo = 1,
-                                fecha = "",
-                                guiaIngreso = drM.GetString(12),
-                                guiaIngresoId = drM.GetString(13)
-                            });
-                        }
-                        s.materiales = m;
-                    }
-
-                    // Obras TD
-
-                    SqlCommand cmdO = con.CreateCommand();
-                    cmdO.CommandTimeout = 0;
-                    cmdO.CommandType = CommandType.StoredProcedure;
-                    cmdO.CommandText = "Movil_GetObrasTd";
-                    cmdO.Parameters.Add("@usuarioId", SqlDbType.VarChar).Value = q.usuarioId;
-                    cmdO.Parameters.Add("@centroCostoId", SqlDbType.VarChar).Value = q.centroCostoId;
-                    SqlDataReader drO = cmdO.ExecuteReader();
-                    if (drO.HasRows)
-                    {
-                        List<Obra> o = new List<Obra>();
-                        while (drO.Read())
-                        {
-                            o.Add(new Obra()
-                            {
-                                obraId = drO.GetString(0),
-                                descripcion = drO.GetString(1),
-                                estado = drO.GetString(2),
-                                direccion = drO.GetString(3),
-                                cliente = drO.GetString(4),
-                                fechaAsignacion = drO.GetDateTime(5).ToString("dd/MM/yyyy"),
-                                fechaVencimiento = drO.GetDateTime(6).ToString("dd/MM/yyyy"),
-                                usuarioCreacion = drO.GetString(7)
-                            });
-                        }
-                        s.obras = o;
-                    }
-
-
-                    // Delegacion
-
+                    //SqlCommand cmdV = con.CreateCommand();
+                    //cmdV.CommandTimeout = 0;
+                    //cmdV.CommandType = CommandType.StoredProcedure;
+                    //cmdV.CommandText = "Movil_GetVehiculos";
+                    ////cmdV.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    //SqlDataReader drV = cmdV.ExecuteReader();
+                    //if (drV.HasRows)
+                    //{
+                    //    List<Vehiculo> v = new List<Vehiculo>();
+                    //    while (drV.Read())
+                    //    {
+                    //        v.Add(new Vehiculo()
+                    //        {
+                    //            codigo = drV.GetString(0),
+                    //            placa = drV.GetString(1),
+                    //            tipoVehiculo = drV.GetString(2),
+                    //            marca = drV.GetString(3),
+                    //            modelo = drV.GetString(4),
+                    //            anio = drV.GetString(5),
+                    //            combustible = drV.GetString(6),
+                    //            condicion = drV.GetString(7),
+                    //            costo = drV.GetString(8),
+                    //            serie = drV.GetString(9),
+                    //            estado = 0
+                    //
+                    //        });
+                    //    }
+                    //    s.vehiculos = v;
+                    //}
+                    //
+                    //SqlCommand cmdC = con.CreateCommand();
+                    //cmdC.CommandTimeout = 0;
+                    //cmdC.CommandType = CommandType.StoredProcedure;
+                    //cmdC.CommandText = "Movil_GetCombos";
+                    //SqlDataReader drC = cmdC.ExecuteReader();
+                    //if (drC.HasRows)
+                    //{
+                    //    List<ParametroT> p = new List<ParametroT>();
+                    //    while (drC.Read())
+                    //    {
+                    //        p.Add(new ParametroT()
+                    //        {
+                    //            tipo = drC.GetInt32(0),
+                    //            campo1 = drC.GetString(1),
+                    //            campo2 = drC.GetString(2)
+                    //        });
+                    //    }
+                    //    s.parametrosT = p;
+                    //}
+                    //
+                    //SqlCommand cmdE = con.CreateCommand();
+                    //cmdE.CommandTimeout = 0;
+                    //cmdE.CommandType = CommandType.StoredProcedure;
+                    //cmdE.CommandText = "Movil_GetEstados";
+                    //SqlDataReader drE = cmdE.ExecuteReader();
+                    //if (drE.HasRows)
+                    //{
+                    //    List<Estado> e = new List<Estado>();
+                    //    while (drE.Read())
+                    //    {
+                    //        e.Add(new Estado()
+                    //        {
+                    //            codigo = drE.GetString(0),
+                    //            nombre = drE.GetString(1)
+                    //        });
+                    //    }
+                    //    s.estados = e;
+                    //}
+                    //
+                    //SqlCommand cmdAlm = con.CreateCommand();
+                    //cmdAlm.CommandTimeout = 0;
+                    //cmdAlm.CommandType = CommandType.StoredProcedure;
+                    //cmdAlm.CommandText = "Movil_GetAlmacenes";
+                    //cmdAlm.Parameters.Add("@sucursal", SqlDbType.VarChar).Value = q.sucursalId;
+                    //cmdAlm.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    //SqlDataReader drAl = cmdAlm.ExecuteReader();
+                    //if (drAl.HasRows)
+                    //{
+                    //    List<Almacen> alm = new List<Almacen>();
+                    //    while (drAl.Read())
+                    //    {
+                    //        alm.Add(new Almacen()
+                    //        {
+                    //            codigo = drAl.GetString(0),
+                    //            tipoCodigo = drAl.GetString(1),
+                    //            sucursalCodigo = drAl.GetString(2),
+                    //            descripcion = drAl.GetString(3),
+                    //            opCodigo = drAl.GetString(4),
+                    //            inventario = drAl.GetString(5),
+                    //            equipamiento = drAl.GetString(6),
+                    //            seraEdelnor = drAl.GetString(7)
+                    //        });
+                    //    }
+                    //    s.almacens = alm;
+                    //}
+                    //
+                    //SqlCommand cmdParametro = con.CreateCommand();
+                    //cmdParametro.CommandTimeout = 0;
+                    //cmdParametro.CommandType = CommandType.StoredProcedure;
+                    //cmdParametro.CommandText = "Movil_GetParametros";
+                    //SqlDataReader drParametro = cmdParametro.ExecuteReader();
+                    //if (drParametro.HasRows)
+                    //{
+                    //    List<ParametroE> parametro = new List<ParametroE>();
+                    //    while (drParametro.Read())
+                    //    {
+                    //        parametro.Add(new ParametroE()
+                    //        {
+                    //            id_Configuracion = drParametro.GetInt32(0),
+                    //            nombre_parametro = drParametro.GetString(1),
+                    //            valor = drParametro.GetInt32(2)
+                    //        });
+                    //    }
+                    //    s.parametrosE = parametro;
+                    //}
+                    //
+                    //// Parte Diario
+                    //
+                    //SqlCommand cmdP = con.CreateCommand();
+                    //cmdP.CommandTimeout = 0;
+                    //cmdP.CommandType = CommandType.StoredProcedure;
+                    //cmdP.CommandText = "Movil_GetParteDiario_C";
+                    //cmdP.Parameters.Add("@Area", SqlDbType.VarChar).Value = q.areaId;
+                    //cmdP.Parameters.Add("@UsuarioId", SqlDbType.VarChar).Value = q.usuarioId;
+                    //cmdP.Parameters.Add("@CentroCostoId", SqlDbType.VarChar).Value = q.centroCostoId;
+                    //SqlDataReader drP = cmdP.ExecuteReader();
+                    //if (drP.HasRows)
+                    //{
+                    //    List<ParteDiario> parte = new List<ParteDiario>();
+                    //    while (drP.Read())
+                    //    {
+                    //        var p = new ParteDiario();
+                    //        p.parteDiarioId = drP.GetInt32(0);
+                    //        p.identity = drP.GetInt32(0);
+                    //        p.fecha = drP.GetDateTime(1).ToString("dd/MM/yyyy");
+                    //        p.obraTd = drP.GetString(2);
+                    //        p.codigoEstadoPd = drP.GetString(3);
+                    //        p.estadoTd = drP.GetString(4);
+                    //        p.codigoEstadoObra = drP.GetString(5);
+                    //        p.estadoObra = drP.GetString(6);
+                    //        p.descripcion = drP.GetString(7);
+                    //        p.direccion = drP.GetString(8);
+                    //        p.cliente = drP.GetString(9);
+                    //        p.fechaAsignacion = drP.GetDateTime(10).ToString("dd/MM/yyyy");
+                    //        p.fechaVencimiento = drP.GetDateTime(11).ToString("dd/MM/yyyy");
+                    //        p.suministro = drP.GetString(12);
+                    //        p.sed = drP.GetString(13);
+                    //        p.observacion = drP.GetString(14);
+                    //        p.empresaCodigo = drP.GetString(15);
+                    //        p.areaCodigo = drP.GetString(16);
+                    //        p.codigoInterno = drP.GetString(17);
+                    //        p.costoCodigo = drP.GetString(18);
+                    //        p.cuadrillaCodigo = drP.GetString(19);
+                    //        p.dniCuadrilla = drP.GetString(20);
+                    //        p.estadoCodigo = drP.GetString(21);
+                    //        p.usuarioCreacion = drP.GetString(22);
+                    //        p.fechaMovil = drP.GetDateTime(23).ToString("dd/MM/yyyy HH:mm:ss");
+                    //        p.sucursalId = drP.GetString(24);
+                    //        p.latitud = drP.GetString(25);
+                    //        p.longitud = drP.GetString(26);
+                    //        p.coordinadorDni = drP.GetString(27);
+                    //        p.descripcionCoordinador = drP.GetString(28);
+                    //        p.firmaMovil = drP.GetString(29);
+                    //        p.tipo = 1;
+                    //        p.estado = 1;
+                    //        p.medencontrado_nro = "";
+                    //        p.medencontrado_marca = "";
+                    //        p.medencontrado_fase = "";
+                    //        p.medencontrado_estado = "";
+                    //        p.medencontrado_modelo = "";
+                    //        p.medinstalado_nro = "";
+                    //        p.medinstalado_marca = "";
+                    //        p.medinstalado_fase = "";
+                    //        p.medinstalado_estado = "";
+                    //        p.medinstalado_modelo = "";
+                    //
+                    //        // PARTE DIARIO BAREMO
+                    //
+                    //        SqlCommand cmdPB = con.CreateCommand();
+                    //        cmdPB.CommandTimeout = 0;
+                    //        cmdPB.CommandType = CommandType.StoredProcedure;
+                    //        cmdPB.CommandText = "Movil_GetParteDiarioBaremo_C";
+                    //        cmdPB.Parameters.Add("@parteDiarioId", SqlDbType.VarChar).Value = p.parteDiarioId;
+                    //
+                    //        SqlDataReader dmPB = cmdPB.ExecuteReader();
+                    //        if (dmPB.HasRows)
+                    //        {
+                    //            List<RegistroBaremo> rb = new List<RegistroBaremo>();
+                    //
+                    //            while (dmPB.Read())
+                    //            {
+                    //                rb.Add(new RegistroBaremo()
+                    //                {
+                    //                    registroBaremoId = dmPB.GetInt32(0),
+                    //                    identityDetalle = dmPB.GetInt32(0),
+                    //                    parteDiarioId = dmPB.GetInt32(1),
+                    //                    identity = dmPB.GetInt32(1),
+                    //                    codigoBaremo = dmPB.GetString(2),
+                    //                    cantidadMovil = dmPB.GetDecimal(3),
+                    //                    cantidadOk = dmPB.GetDecimal(4),
+                    //                    fecha = dmPB.GetDateTime(5).ToString("dd/MM/yyyy"),
+                    //                    tipo = 1,
+                    //                    descripcion = dmPB.GetString(6),
+                    //                    abreviatura = dmPB.GetString(7),
+                    //                    unidadMedida = dmPB.GetString(8),
+                    //                    estado = p.estadoCodigo
+                    //                });
+                    //            }
+                    //            p.baremos = rb;
+                    //        }
+                    //
+                    //        // PARTE DIARIO MATERIALES
+                    //
+                    //        SqlCommand cmdPM = con.CreateCommand();
+                    //        cmdPM.CommandTimeout = 0;
+                    //        cmdPM.CommandType = CommandType.StoredProcedure;
+                    //        cmdPM.CommandText = "Movil_GetParteDiarioMaterial_C";
+                    //        cmdPM.Parameters.Add("@parteDiarioId", SqlDbType.VarChar).Value = p.parteDiarioId;
+                    //
+                    //        SqlDataReader dmPM = cmdPM.ExecuteReader();
+                    //        if (dmPM.HasRows)
+                    //        {
+                    //            List<RegistroMaterial> rm = new List<RegistroMaterial>();
+                    //
+                    //            while (dmPM.Read())
+                    //            {
+                    //                rm.Add(new RegistroMaterial()
+                    //                {
+                    //                    registroMaterialId = dmPM.GetInt32(0),
+                    //                    identityDetalle = dmPM.GetInt32(0),
+                    //                    identity = dmPM.GetInt32(1),
+                    //                    parteDiarioId = dmPM.GetInt32(1),
+                    //                    tipoMaterial = dmPM.GetInt32(2),
+                    //                    almacenId = dmPM.GetString(3),
+                    //                    codigoMaterial = dmPM.GetString(4),
+                    //                    cantidadMovil = dmPM.GetDecimal(5),
+                    //                    cantidadOk = dmPM.GetDecimal(6),
+                    //                    fecha = dmPM.GetDateTime(7).ToString("dd/MM/yyyy"),
+                    //                    tipo = 1,
+                    //                    descripcion = dmPM.GetString(8),
+                    //                    abreviatura = dmPM.GetString(9),
+                    //                    unidadMedida = dmPM.GetString(10),
+                    //                    guiaSalida = dmPM.GetString(11),
+                    //                    nroSerie = dmPM.GetString(12),
+                    //                    estado = p.estadoCodigo
+                    //                });
+                    //            }
+                    //            p.materiales = rm;
+                    //        }
+                    //
+                    //        // PARTE DIARIO PHOTOS
+                    //
+                    //        SqlCommand cmdPP = con.CreateCommand();
+                    //        cmdPP.CommandTimeout = 0;
+                    //        cmdPP.CommandType = CommandType.StoredProcedure;
+                    //        cmdPP.CommandText = "Movil_GetParteDiarioFoto_C";
+                    //        cmdPP.Parameters.Add("@parteDiarioId", SqlDbType.VarChar).Value = p.parteDiarioId;
+                    //
+                    //        SqlDataReader dmPP = cmdPP.ExecuteReader();
+                    //        if (dmPP.HasRows)
+                    //        {
+                    //            List<RegistroPhoto> rp = new List<RegistroPhoto>();
+                    //
+                    //            while (dmPP.Read())
+                    //            {
+                    //                rp.Add(new RegistroPhoto()
+                    //                {
+                    //                    registroPhotoId = dmPP.GetInt32(0),
+                    //                    identityFoto = dmPP.GetInt32(0),
+                    //                    identity = dmPP.GetInt32(1),
+                    //                    parteDiarioId = dmPP.GetInt32(1),
+                    //                    nombre = dmPP.GetString(2),
+                    //                    fecha = dmPP.GetDateTime(3).ToString("dd/MM/yyyy"),
+                    //                    tipo = 1
+                    //                });
+                    //            }
+                    //            p.photos = rp;
+                    //        }
+                    //        parte.Add(p);
+                    //    }
+                    //    s.parteDiarios = parte;
+                    //}
+                    //
+                    //// Baremos
+                    //
+                    //SqlCommand cmdB = con.CreateCommand();
+                    //cmdB.CommandTimeout = 0;
+                    //cmdB.CommandType = CommandType.StoredProcedure;
+                    //cmdB.CommandText = "Movil_GetBaremos_C";
+                    //cmdB.Parameters.Add("@area", SqlDbType.VarChar).Value = q.areaId;
+                    //cmdB.Parameters.Add("@cc", SqlDbType.VarChar).Value = q.centroCostoId;
+                    //cmdB.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    //SqlDataReader drB = cmdB.ExecuteReader();
+                    //if (drB.HasRows)
+                    //{
+                    //    List<Baremo> baremo = new List<Baremo>();
+                    //    while (drB.Read())
+                    //    {
+                    //        baremo.Add(new Baremo()
+                    //        {
+                    //            baremoId = drB.GetString(0),
+                    //            descripcion = drB.GetString(1),
+                    //            unidadMedida = drB.GetString(2),
+                    //            abreviatura = drB.GetString(3),
+                    //            actividadId = drB.GetInt32(4)
+                    //        });
+                    //    }
+                    //    s.baremos = baremo;
+                    //}
+                    //
+                    //// Materiales
+                    //
+                    //SqlCommand cmdM = con.CreateCommand();
+                    //cmdM.CommandTimeout = 0;
+                    //cmdM.CommandType = CommandType.StoredProcedure;
+                    //cmdM.CommandText = "Movil_GetMateriales_C";
+                    //cmdM.Parameters.Add("@area", SqlDbType.VarChar).Value = q.areaId;
+                    //cmdM.Parameters.Add("@cc", SqlDbType.VarChar).Value = q.centroCostoId;
+                    //cmdM.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    //SqlDataReader drM = cmdM.ExecuteReader();
+                    //if (drM.HasRows)
+                    //{
+                    //    List<Materiales> m = new List<Materiales>();
+                    //    while (drM.Read())
+                    //    {
+                    //        m.Add(new Materiales()
+                    //        {
+                    //            id = drM.GetInt32(0),
+                    //            tipoMaterial = drM.GetString(1),
+                    //            materialId = drM.GetString(2),
+                    //            descripcion = drM.GetString(3),
+                    //            unidadMedida = drM.GetString(4),
+                    //            abreviatura = drM.GetString(5),
+                    //            stock = drM.GetDecimal(6),
+                    //            obra = drM.GetString(7),
+                    //            cc = drM.GetString(8),
+                    //            almacenId = drM.GetString(9),
+                    //            guiaSalida = drM.GetString(10),
+                    //            exigeSerie = drM.GetString(11),
+                    //            tipo = 1,
+                    //            fecha = "",
+                    //            guiaIngreso = drM.GetString(12),
+                    //            guiaIngresoId = drM.GetString(13)
+                    //        });
+                    //    }
+                    //    s.materiales = m;
+                    //}
+                    //
+                    //// Obras TD
+                    //
+                    //SqlCommand cmdO = con.CreateCommand();
+                    //cmdO.CommandTimeout = 0;
+                    //cmdO.CommandType = CommandType.StoredProcedure;
+                    //cmdO.CommandText = "Movil_GetObrasTd";
+                    //cmdO.Parameters.Add("@usuarioId", SqlDbType.VarChar).Value = q.usuarioId;
+                    //cmdO.Parameters.Add("@centroCostoId", SqlDbType.VarChar).Value = q.centroCostoId;
+                    //SqlDataReader drO = cmdO.ExecuteReader();
+                    //if (drO.HasRows)
+                    //{
+                    //    List<Obra> o = new List<Obra>();
+                    //    while (drO.Read())
+                    //    {
+                    //        o.Add(new Obra()
+                    //        {
+                    //            obraId = drO.GetString(0),
+                    //            descripcion = drO.GetString(1),
+                    //            estado = drO.GetString(2),
+                    //            direccion = drO.GetString(3),
+                    //            cliente = drO.GetString(4),
+                    //            fechaAsignacion = drO.GetDateTime(5).ToString("dd/MM/yyyy"),
+                    //            fechaVencimiento = drO.GetDateTime(6).ToString("dd/MM/yyyy"),
+                    //            usuarioCreacion = drO.GetString(7)
+                    //        });
+                    //    }
+                    //    s.obras = o;
+                    //}
+                    //
+                    //
+                    //// Delegacion
+                    //
                     SqlCommand cmdDE = con.CreateCommand();
                     cmdDE.CommandTimeout = 0;
                     cmdDE.CommandType = CommandType.StoredProcedure;
@@ -703,9 +617,9 @@ namespace Negocio
                         }
                         s.delegaciones = a;
                     }
-
-                    // Requerimiento Material -- Logistica
-
+                    //
+                    //// Requerimiento Material -- Logistica
+                    //
                     SqlCommand cmdR = con.CreateCommand();
                     cmdR.CommandTimeout = 0;
                     cmdR.CommandType = CommandType.StoredProcedure;
@@ -729,120 +643,120 @@ namespace Negocio
                         }
                         s.requerimientoMateriales = r;
                     }
+                    //
+                    ////s.resumen = r;
+                    //
+                    //SqlCommand cmdPe = con.CreateCommand();
+                    //cmdPe.CommandTimeout = 0;
+                    //cmdPe.CommandType = CommandType.StoredProcedure;
+                    //cmdPe.CommandText = "Movil_getPersonal_CentroCosto";
+                    //cmdPe.Parameters.Add("@UsuarioId", SqlDbType.VarChar).Value = q.usuarioId;
+                    //cmdPe.Parameters.Add("@CentroCostoId", SqlDbType.VarChar).Value = q.centroCostoId;
+                    //SqlDataReader drPe = cmdPe.ExecuteReader();
+                    //if (drPe.HasRows)
+                    //{
+                    //    List<Personal> p = new List<Personal>();
+                    //    while (drPe.Read())
+                    //    {
+                    //        p.Add(new Personal()
+                    //        {
+                    //            personalId = drPe.GetInt32(0),
+                    //            empresaId = drPe.GetInt32(1),
+                    //            nroDocumento = drPe.GetString(2),
+                    //            apellido = drPe.GetString(3),
+                    //            nombre = drPe.GetString(4)
+                    //        });
+                    //    }
+                    //    s.personals = p;
+                    //}
 
-                    //s.resumen = r;
 
-                    SqlCommand cmdPe = con.CreateCommand();
-                    cmdPe.CommandTimeout = 0;
-                    cmdPe.CommandType = CommandType.StoredProcedure;
-                    cmdPe.CommandText = "Movil_getPersonal_CentroCosto";
-                    cmdPe.Parameters.Add("@UsuarioId", SqlDbType.VarChar).Value = q.usuarioId;
-                    cmdPe.Parameters.Add("@CentroCostoId", SqlDbType.VarChar).Value = q.centroCostoId;
-                    SqlDataReader drPe = cmdPe.ExecuteReader();
-                    if (drPe.HasRows)
-                    {
-                        List<Personal> p = new List<Personal>();
-                        while (drPe.Read())
-                        {
-                            p.Add(new Personal()
-                            {
-                                personalId = drPe.GetInt32(0),
-                                empresaId = drPe.GetInt32(1),
-                                nroDocumento = drPe.GetString(2),
-                                apellido = drPe.GetString(3),
-                                nombre = drPe.GetString(4)
-                            });
-                        }
-                        s.personals = p;
-                    }
+                    //SqlCommand cmdCo = con.CreateCommand();
+                    //cmdCo.CommandTimeout = 0;
+                    //cmdCo.CommandType = CommandType.StoredProcedure;
+                    //cmdCo.CommandText = "Movil_GetUsuario_Coordinador_C";
+                    //cmdCo.Parameters.Add("@Codigo_OP", SqlDbType.VarChar).Value = q.centroCostoId;
+                    //SqlDataReader drCo = cmdCo.ExecuteReader();
+                    //if (drCo.HasRows)
+                    //{
+                    //    List<Coordinador> c = new List<Coordinador>();
+                    //    while (drCo.Read())
+                    //    {
+                    //        c.Add(new Coordinador()
+                    //        {
+                    //            codigo = drCo.GetString(0),
+                    //            nombre = drCo.GetString(1)
+                    //        });
+                    //    }
+                    //    s.coordinadors = c;
+                    //}
 
-
-                    SqlCommand cmdCo = con.CreateCommand();
-                    cmdCo.CommandTimeout = 0;
-                    cmdCo.CommandType = CommandType.StoredProcedure;
-                    cmdCo.CommandText = "Movil_GetUsuario_Coordinador_C";
-                    cmdCo.Parameters.Add("@Codigo_OP", SqlDbType.VarChar).Value = q.centroCostoId;
-                    SqlDataReader drCo = cmdCo.ExecuteReader();
-                    if (drCo.HasRows)
-                    {
-                        List<Coordinador> c = new List<Coordinador>();
-                        while (drCo.Read())
-                        {
-                            c.Add(new Coordinador()
-                            {
-                                codigo = drCo.GetString(0),
-                                nombre = drCo.GetString(1)
-                            });
-                        }
-                        s.coordinadors = c;
-                    }
-
-                    SqlCommand cmdA = con.CreateCommand();
-                    cmdA.CommandTimeout = 0;
-                    cmdA.CommandType = CommandType.StoredProcedure;
-                    cmdA.CommandText = "Movil_GetActividad_C";
-                    SqlDataReader drA = cmdA.ExecuteReader();
-                    if (drA.HasRows)
-                    {
-                        List<Actividad> a = new List<Actividad>();
-                        while (drA.Read())
-                        {
-                            a.Add(new Actividad()
-                            {
-                                actividadId = drA.GetInt32(0),
-                                descripcion = drA.GetString(1)
-                            });
-                        }
-                        s.actividades = a;
-                    }
-
-                    // MEDIDOR
-
-                    SqlCommand cmdMe = con.CreateCommand();
-                    cmdMe.CommandTimeout = 0;
-                    cmdMe.CommandType = CommandType.StoredProcedure;
-                    cmdMe.CommandText = "Movil_GetMateriales_Series_C";
-                    cmdMe.Parameters.Add("@area", SqlDbType.VarChar).Value = q.areaId;
-                    cmdMe.Parameters.Add("@cc", SqlDbType.VarChar).Value = q.centroCostoId;
-                    cmdMe.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
-                    SqlDataReader drMe = cmdMe.ExecuteReader();
-                    if (drMe.HasRows)
-                    {
-                        List<Medidor> m = new List<Medidor>();
-                        while (drMe.Read())
-                        {
-                            m.Add(new Medidor()
-                            {
-                                medidorId = drMe.GetString(0),
-                                sucursalCodigo = drMe.GetString(1),
-                                almacenCodigo = drMe.GetString(2),
-                                empleadoDni = drMe.GetString(3),
-                                guiaNumero = drMe.GetString(4),
-                                articuloCodigo = drMe.GetString(5)
-                            });
-                        }
-                        s.medidores = m;
-                    }
-
-                    SqlCommand cmdTD = con.CreateCommand();
-                    cmdTD.CommandTimeout = 0;
-                    cmdTD.CommandType = CommandType.StoredProcedure;
-                    cmdTD.CommandText = "Movil_GetTipoDevolucion_C";
-                    SqlDataReader drTD = cmdTD.ExecuteReader();
-                    if (drTD.HasRows)
-                    {
-                        List<TipoDevolucion> t = new List<TipoDevolucion>();
-                        while (drTD.Read())
-                        {
-                            t.Add(new TipoDevolucion()
-                            {
-                                tipo = drTD.GetInt32(0),
-                                descripcion = drTD.GetString(1),
-                                estado = drTD.GetInt32(2)
-                            });
-                        }
-                        s.devoluciones = t;
-                    }
+                    //SqlCommand cmdA = con.CreateCommand();
+                    //cmdA.CommandTimeout = 0;
+                    //cmdA.CommandType = CommandType.StoredProcedure;
+                    //cmdA.CommandText = "Movil_GetActividad_C";
+                    //SqlDataReader drA = cmdA.ExecuteReader();
+                    //if (drA.HasRows)
+                    //{
+                    //    List<Actividad> a = new List<Actividad>();
+                    //    while (drA.Read())
+                    //    {
+                    //        a.Add(new Actividad()
+                    //        {
+                    //            actividadId = drA.GetInt32(0),
+                    //            descripcion = drA.GetString(1)
+                    //        });
+                    //    }
+                    //    s.actividades = a;
+                    //}
+                    //
+                    //// MEDIDOR
+                    //
+                    //SqlCommand cmdMe = con.CreateCommand();
+                    //cmdMe.CommandTimeout = 0;
+                    //cmdMe.CommandType = CommandType.StoredProcedure;
+                    //cmdMe.CommandText = "Movil_GetMateriales_Series_C";
+                    //cmdMe.Parameters.Add("@area", SqlDbType.VarChar).Value = q.areaId;
+                    //cmdMe.Parameters.Add("@cc", SqlDbType.VarChar).Value = q.centroCostoId;
+                    //cmdMe.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    //SqlDataReader drMe = cmdMe.ExecuteReader();
+                    //if (drMe.HasRows)
+                    //{
+                    //    List<Medidor> m = new List<Medidor>();
+                    //    while (drMe.Read())
+                    //    {
+                    //        m.Add(new Medidor()
+                    //        {
+                    //            medidorId = drMe.GetString(0),
+                    //            sucursalCodigo = drMe.GetString(1),
+                    //            almacenCodigo = drMe.GetString(2),
+                    //            empleadoDni = drMe.GetString(3),
+                    //            guiaNumero = drMe.GetString(4),
+                    //            articuloCodigo = drMe.GetString(5)
+                    //        });
+                    //    }
+                    //    s.medidores = m;
+                    //}
+                    //
+                    //SqlCommand cmdTD = con.CreateCommand();
+                    //cmdTD.CommandTimeout = 0;
+                    //cmdTD.CommandType = CommandType.StoredProcedure;
+                    //cmdTD.CommandText = "Movil_GetTipoDevolucion_C";
+                    //SqlDataReader drTD = cmdTD.ExecuteReader();
+                    //if (drTD.HasRows)
+                    //{
+                    //    List<TipoDevolucion> t = new List<TipoDevolucion>();
+                    //    while (drTD.Read())
+                    //    {
+                    //        t.Add(new TipoDevolucion()
+                    //        {
+                    //            tipo = drTD.GetInt32(0),
+                    //            descripcion = drTD.GetString(1),
+                    //            estado = drTD.GetInt32(2)
+                    //        });
+                    //    }
+                    //    s.devoluciones = t;
+                    //}
 
                     SqlCommand cmdRE = con.CreateCommand();
                     cmdRE.CommandTimeout = 0;
@@ -919,6 +833,67 @@ namespace Negocio
                             });
                         }
                         s.comboEstados = e;
+                    }
+
+                    SqlCommand cmd2 = con.CreateCommand();
+                    cmd2.CommandTimeout = 0;
+                    cmd2.CommandType = CommandType.StoredProcedure;
+                    cmd2.CommandText = "DSIGE_Proy_M_Locales_Usuario";
+                    cmd2.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    SqlDataReader dr2 = cmd2.ExecuteReader();
+                    if (dr2.HasRows)
+                    {
+                        List<Estado> e = new List<Estado>();
+                        while (dr2.Read())
+                        {
+                            e.Add(new Estado()
+                            {
+                                codigo = dr2.GetString(0),
+                                nombre = dr2.GetString(1)
+                            });
+                        }
+                        s.locales = e;
+                    }
+
+                    SqlCommand cmd3 = con.CreateCommand();
+                    cmd3.CommandTimeout = 0;
+                    cmd3.CommandType = CommandType.StoredProcedure;
+                    cmd3.CommandText = "DSIGE_Proy_M_Almacen_Usuario";
+                    cmd3.Parameters.Add("@usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    SqlDataReader dr3 = cmd3.ExecuteReader();
+                    if (dr3.HasRows)
+                    {
+                        List<Estado> e = new List<Estado>();
+                        while (dr3.Read())
+                        {
+                            e.Add(new Estado()
+                            {
+                                codigo = dr3.GetString(0),
+                                nombre = dr3.GetString(1),
+								sucuCodigo = dr3.GetString(2)
+                            });
+                        }
+                        s.almacenes = e;
+                    }
+					
+					SqlCommand cmd4 = con.CreateCommand();
+                    cmd4.CommandTimeout = 0;
+                    cmd4.CommandType = CommandType.StoredProcedure;
+                    cmd4.CommandText = "DSIGE_Proy_M_Estados_Aprobacion_Orden_Compra";
+                    cmd4.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    SqlDataReader dr4 = cmd4.ExecuteReader();
+                    if (dr4.HasRows)
+                    {
+                        List<Estado> e = new List<Estado>();
+                        while (dr4.Read())
+                        {
+                            e.Add(new Estado()
+                            {
+                                codigo = dr4.GetString(0),
+                                nombre = dr4.GetString(1)
+                            });
+                        }
+                        s.ordenEstados = e;
                     }
 
                     con.Close();
@@ -1729,7 +1704,7 @@ namespace Negocio
             }
         }
 
-        public static List<Orden> GetOrdenCompra(string usuario)
+        public static List<Orden> GetOrdenCompra(Query q)
         {
             try
             {
@@ -1741,8 +1716,8 @@ namespace Negocio
                     cmd.CommandTimeout = 0;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "DSIGE_Proy_M_Lista_Aprobacion_Orden_Compra";
-                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = usuario;
-                    cmd.Parameters.Add("@Estado", SqlDbType.Int).Value = 1;
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    cmd.Parameters.Add("@Estado", SqlDbType.Int).Value = q.estado;
                     SqlDataReader dr = cmd.ExecuteReader();
                     if (dr.HasRows)
                     {
@@ -1776,6 +1751,8 @@ namespace Negocio
                             o.precio = Convert.ToDecimal(dr.GetDecimal(23));
                             o.importe = Convert.ToDecimal(dr.GetDecimal(24));
                             o.delegacion = dr.GetString(25);
+                            o.cotiCodigo = dr.GetString(26);
+                            o.nivelAcumulado = dr.GetInt32(27);
 
 
                             SqlCommand cmdD = con.CreateCommand();
@@ -1814,7 +1791,7 @@ namespace Negocio
             }
         }
 
-        public static List<Anular> GetAnular(string usuario,string fi,string ff)
+        public static List<Anular> GetAnular(string usuario, string fi, string ff)
         {
             try
             {
@@ -1900,17 +1877,16 @@ namespace Negocio
                     cmd.Parameters.Add("@Ges_Dele_Codigo", SqlDbType.VarChar).Value = s.codigoDelegacion;
                     cmd.Parameters.Add("@Ges_Proy_Codigo", SqlDbType.VarChar).Value = s.codigoCentroCosto;
                     cmd.Parameters.Add("@Ges_Obra_Codigo", SqlDbType.VarChar).Value = "";
+                    cmd.Parameters.Add("@Ges_OrdT_Codigo", SqlDbType.VarChar).Value = "";
                     cmd.Parameters.Add("@Ges_Empl_Dni", SqlDbType.VarChar).Value = "";
                     cmd.Parameters.Add("@Log_PedC_Fecha", SqlDbType.VarChar).Value = s.fecha;
                     cmd.Parameters.Add("@Log_PedC_Observacion", SqlDbType.VarChar).Value = s.observaciones;
                     cmd.Parameters.Add("@Log_PedC_Flag", SqlDbType.VarChar).Value = "";
-                    cmd.Parameters.Add("@Log_PedC_TipoCambio", SqlDbType.VarChar).Value = "";
+                    cmd.Parameters.Add("@Pub_Mone_Codigo", SqlDbType.VarChar).Value = "";
+                    cmd.Parameters.Add("@Log_PedC_TipoCambio", SqlDbType.Decimal).Value = 0.0;
                     cmd.Parameters.Add("@Log_PedC_FechaAtencion", SqlDbType.VarChar).Value = s.fecha;
                     cmd.Parameters.Add("@Log_PedC_HoraAtencion", SqlDbType.VarChar).Value = "";
                     cmd.Parameters.Add("@Log_PedCDireccionAtencion", SqlDbType.VarChar).Value = "";
-
-
-
                     cmd.ExecuteNonQuery();
 
                     foreach (var b in s.detalle)
@@ -1992,6 +1968,41 @@ namespace Negocio
                 throw e;
             }
         }
+		
+		    public static Mensaje UpdateCantidadCampoJefeTiempoVida(Query s)
+        {
+            try
+            {
+                Mensaje mensaje = null;
+
+                using (SqlConnection con = new SqlConnection(db))
+                {
+                    con.Open();
+
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandTimeout = 0;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "DSIGE_Proy_M_Pedidos_OrdenCompra_ActualizarDetalle";
+                    cmd.Parameters.Add("@TipoFormulario", SqlDbType.VarChar).Value = s.tipoProceso;
+					cmd.Parameters.Add("@Cantidad", SqlDbType.Decimal).Value = s.cantidad;
+                    cmd.Parameters.Add("@Alm_PedD_Identidad", SqlDbType.Int).Value = s.detalleId;
+                    cmd.ExecuteNonQuery();
+
+                    mensaje = new Mensaje
+                    {
+                        mensaje = "Actualizado",
+                        codigoBase = s.detalleId
+                    };
+
+                    con.Close();
+                }
+                return mensaje;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public static Mensaje AprobacionOrdenCompra(Query s)
         {
@@ -2007,9 +2018,80 @@ namespace Negocio
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "DSIGE_Proy_M_Aprobacion_Orden_Compra_Aprueba_Rechaza";
                     cmd.Parameters.Add("@TipoProceso", SqlDbType.VarChar).Value = s.tipoProceso;
-                    cmd.Parameters.Add("@Usuario", SqlDbType.Int).Value = s.usuarioId;
-                    cmd.Parameters.Add("@Log_OCom_Identidad", SqlDbType.VarChar).Value = s.detalleId;
-                    cmd.Parameters.Add("@OBS_Rechazo", SqlDbType.Decimal).Value = s.search;                  
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = s.usuarioId;
+                    cmd.Parameters.Add("@Log_OCom_Identidad", SqlDbType.Int).Value = s.detalleId;
+                    cmd.Parameters.Add("@OBS_Rechazo", SqlDbType.VarChar).Value = s.search;
+                    cmd.ExecuteNonQuery();
+
+                    mensaje = new Mensaje
+                    {
+                        mensaje = "Actualizado",
+                        codigoBase = s.detalleId
+                    };
+
+                    con.Close();
+                }
+                return mensaje;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static Mensaje AprobacionPedido(Query s)
+        {
+            try
+            {
+                Mensaje mensaje = null;
+
+                using (SqlConnection con = new SqlConnection(db))
+                {
+                    con.Open();
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandTimeout = 0;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "DSIGE_Proy_M_Pedidos_OrdenCompra_Rechazar";
+                    cmd.Parameters.Add("@TipoProceso", SqlDbType.VarChar).Value = s.tipoProceso;
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = s.usuarioId;
+                    cmd.Parameters.Add("@Log_OCom_Identidad", SqlDbType.Int).Value = s.detalleId;
+                    cmd.Parameters.Add("@OBS_Rechazo", SqlDbType.VarChar).Value = s.search;
+                    cmd.ExecuteNonQuery();
+
+                    mensaje = new Mensaje
+                    {
+                        mensaje = "Actualizado",
+                        codigoBase = s.detalleId
+                    };
+
+                    con.Close();
+                }
+                return mensaje;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+		
+		
+        public static Mensaje AprobacionCampoJefeTiempoVida(Query s)
+        {
+            try
+            {
+                Mensaje mensaje = null;
+
+                using (SqlConnection con = new SqlConnection(db))
+                {
+                    con.Open();
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandTimeout = 0;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "DSIGE_Proy_M_Pedidos_OrdenCompra_Rechazar";
+                    cmd.Parameters.Add("@TipoProceso", SqlDbType.VarChar).Value = s.tipoProceso;
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = s.usuarioId;
+                    cmd.Parameters.Add("@Log_OCom_Identidad", SqlDbType.Int).Value = s.detalleId;
+                    cmd.Parameters.Add("@OBS_Rechazo", SqlDbType.VarChar).Value = s.search;
                     cmd.ExecuteNonQuery();
 
                     mensaje = new Mensaje
@@ -2041,15 +2123,15 @@ namespace Negocio
                     cmd.CommandTimeout = 0;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "DSIGE_Proy_M_Orden_Compra_Anulacion_Evento";
-                    cmd.Parameters.Add("@Log_OCom_Identidad", SqlDbType.VarChar).Value = s.detalleId;
-                    cmd.Parameters.Add("@Usuario", SqlDbType.Int).Value = s.usuarioId;
+                    cmd.Parameters.Add("@Log_OCom_Identidad", SqlDbType.Int).Value = s.detalleId;
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = s.usuarioId;
                     cmd.Parameters.Add("@Perfil", SqlDbType.VarChar).Value = s.matricula;
-                    cmd.Parameters.Add("@OBS_Rechazo", SqlDbType.Decimal).Value = s.search;                 
+                    cmd.Parameters.Add("@OBS_Rechazo", SqlDbType.VarChar).Value = s.search;
                     cmd.ExecuteNonQuery();
 
                     mensaje = new Mensaje
                     {
-                        mensaje = "Actualizado",                                                
+                        mensaje = "Actualizado",
                         codigoBase = s.detalleId
                     };
 
@@ -2062,6 +2144,163 @@ namespace Negocio
                 throw e;
             }
         }
+
+        public static List<CampoJefe> GetCampoJefe(Query r)
+        {
+            try
+            {
+                List<CampoJefe> p = null;
+
+                using (SqlConnection con = new SqlConnection(db))
+                {
+                    con.Open();
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandTimeout = 0;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "DSIGE_Proy_M_PedidosColaborador_Lista";
+                    cmd.Parameters.Add("@Delegacion", SqlDbType.VarChar).Value = r.delegacionId;
+                    cmd.Parameters.Add("@Sucursal", SqlDbType.VarChar).Value = r.sucursalId;
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = r.usuarioId;
+                    cmd.Parameters.Add("@Almacen", SqlDbType.VarChar).Value = r.almacenId;
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        p = new List<CampoJefe>();
+                        while (dr.Read())
+                        {
+                            p.Add(new CampoJefe()
+                            {
+                                id = dr.GetInt32(0),
+                                idDet = dr.GetInt32(1),
+                                pubSucuCodigo = dr.GetString(2),
+                                almaCodigo = dr.GetString(3),
+                                obraCodigo = dr.GetString(4),
+                                pedcNumero = dr.GetString(5),
+                                pedcFechaEnvio = dr.GetDateTime(6).ToString("dd/MM/yyyy HH:mm:ss"),
+                                pedcFolioOrigen = dr.GetString(7),
+                                nomApellidos = dr.GetString(8),
+                                pedcFechaCreada = dr.GetDateTime(9).ToString("dd/MM/yyyy HH:mm:ss"),
+                                usuarioCrea = dr.GetString(10),
+                                nombreOt = dr.GetString(11),
+                                almaDescripcion = dr.GetString(12),
+                                nombreEstado = dr.GetString(13),
+                                articulo = dr.GetString(14),
+                                nombreArticulo = dr.GetString(15),
+                                cantidadPedida = Convert.ToDecimal(dr.GetDecimal(16)),
+                                cantidadAprobada = Convert.ToDecimal(dr.GetDecimal(17)),
+                                guicGuiaRemision = dr.GetString(18),
+                                guiaRemision = dr.GetString(19)
+                            });
+                        }
+                    }
+                    con.Close();
+                }
+
+                return p;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
+        public static List<TiempoVida> GetTiempoVida(Query r)
+        {
+            try
+            {
+                List<TiempoVida> p = null;
+
+                using (SqlConnection con = new SqlConnection(db))
+                {
+                    con.Open();
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandTimeout = 0;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "DSIGE_Proy_M_PedidosTiempoVida_Lista";
+                    cmd.Parameters.Add("@Delegacion", SqlDbType.VarChar).Value = r.delegacionId;
+                    cmd.Parameters.Add("@Sucursal", SqlDbType.VarChar).Value = r.sucursalId;
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = r.usuarioId;
+                    cmd.Parameters.Add("@Almacen", SqlDbType.VarChar).Value = r.almacenId;                     
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        p = new List<TiempoVida>();
+                        while (dr.Read())
+                        {
+                            p.Add(new TiempoVida()
+                            {
+                                id = dr.GetInt32(0),
+                                idDet = dr.GetInt32(1),
+                                pubSucuCodigo = dr.GetString(2),
+                                almaCodigo = dr.GetString(3),
+                                obraCodigo = dr.GetString(4),
+                                pedcNumero = dr.GetString(5),
+                                pedcFechaEnvio = dr.GetDateTime(6).ToString("dd/MM/yyyy HH:mm:ss"),
+                                pedcFolioOrigen = dr.GetString(7),
+                                nomApellidos = dr.GetString(8),
+                                pedcFechaCreada = dr.GetDateTime(9).ToString("dd/MM/yyyy HH:mm:ss"),
+                                usuarioCrea = dr.GetString(10),
+                                nombreOt = dr.GetString(11),
+                                almaDescripcion = dr.GetString(12),
+                                nombreEstado = dr.GetString(13),
+                                articulo = dr.GetString(14),
+                                nombreArticulo = dr.GetString(15),
+                                cantidadPedida = Convert.ToDecimal(dr.GetDecimal(16)),
+                                cantidadAprobada = Convert.ToDecimal(dr.GetDecimal(17)),
+                                guicGuiaRemision = dr.GetString(18),
+                                guiaRemision = dr.GetString(19)
+                            });
+                        }
+                    }
+                    con.Close();
+                }
+
+
+                return p;
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+
+        public static Mensaje GetAprobarItemsCampoJefeTiempoVida(Query s)
+        {
+            try
+            {
+                Mensaje mensaje = null;
+
+                using (SqlConnection con = new SqlConnection(db))
+                {
+                    con.Open();
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandTimeout = 0;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "DSIGE_Proy_M_Pedidos_OrdenCompra_ActualizarDetalle_Masivo";
+                    cmd.Parameters.Add("@TipoFormulario", SqlDbType.VarChar).Value = s.tipoProceso;
+                    cmd.Parameters.Add("@log_Pedd_identidad", SqlDbType.Int).Value = s.detalleId;
+                    cmd.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = s.usuarioId;                   
+                    cmd.ExecuteNonQuery();
+
+                    mensaje = new Mensaje
+                    {
+                        mensaje = "Actualizado",
+                        codigoBase = s.detalleId
+                    };
+
+                    con.Close();
+                }
+                return mensaje;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }
 

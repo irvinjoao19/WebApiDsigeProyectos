@@ -10,5 +10,6 @@ namespace Entidades
     {
         public string codigo { get; set; }
         public string nombre { get; set; }
+        public string sucuCodigo { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace Entidades
         public string usuarioId { get; set; }
         public string cuadrillaId { get; set; }
         public string sucursalId { get; set; }
+        public string delegacionId { get; set; }
         public string centroCostoId { get; set; }
         public int filtro { get; set; }
         public string fechaInicial { get; set; }
