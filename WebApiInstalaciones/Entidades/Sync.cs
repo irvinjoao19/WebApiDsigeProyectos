@@ -28,5 +28,6 @@ namespace Entidades
         public List<Estado> almacenes { get; set; }
         public List<Estado> locales { get; set; }
         public List<Estado> ordenEstados { get; set; }
+        public List<MenuLogistica> menu { get; set; }
     }
 }

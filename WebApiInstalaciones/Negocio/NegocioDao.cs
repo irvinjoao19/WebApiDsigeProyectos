@@ -896,6 +896,27 @@ namespace Negocio
                         s.ordenEstados = e;
                     }
 
+                    SqlCommand cmd5 = con.CreateCommand();
+                    cmd5.CommandTimeout = 0;
+                    cmd5.CommandType = CommandType.StoredProcedure;
+                    cmd5.CommandText = "Movil_Menu_Logistica";
+                    cmd5.Parameters.Add("@Usuario", SqlDbType.VarChar).Value = q.usuarioId;
+                    SqlDataReader dr5 = cmd5.ExecuteReader();
+                    if (dr5.HasRows)
+                    {
+                        List<MenuLogistica> e = new List<MenuLogistica>();
+                        while (dr5.Read())
+                        {
+                            e.Add(new MenuLogistica()
+                            {
+                                id = dr5.GetInt32(0),
+                                nombre = dr5.GetString(1),
+                                orden = dr5.GetInt32(2)
+                            });
+                        }
+                        s.menu = e;
+                    }
+
                     con.Close();
                 }
                 return s;
